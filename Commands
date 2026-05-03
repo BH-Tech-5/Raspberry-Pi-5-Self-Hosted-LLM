@@ -1,0 +1,34 @@
+# Below is a list of commands for you to deploy a LLM on your device.
+
+# Tailscale Instructions
+# Install Tailscale
+curl -fsSL https://tailscale.com/install.sh | sh
+# Authenticate and bring the node online
+sudo tailscale up
+# Find your Pi's internal Tailscale IP on the Tailscale home dashboard
+# Check status of other devices in your mesh
+tailscale status
+
+# Install Ollama
+curl -fsSL https://ollama.com/install.sh | sh
+# Pull the Llama 3.2 model (specifically the 3b parameter version, this is just an example - there are many other models)
+ollama pull llama3.2:3b
+# Run the model locally in bash
+ollama run llama3.2:3b
+# List all models currently downloaded
+ollama list
+
+
+# Second, move to docker deployment for accessing the service:
+# Install Docker (if not already present)
+curl -sSL https://get.docker.com | sh
+# Run OpenWebUI and link it to your Ollama instance
+docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main
+# Once this is complete, you should be able to access you LLM with safari. Type in your Pi's IP
+# from Tailscale on port 3000:
+# the URL is http://<Your IP>:3000
+
+# Monitor CPU, RAM, and Temperatures Using HTOP
+htop
+# Check temperature specifically 
+vcgencmd measure_temp
